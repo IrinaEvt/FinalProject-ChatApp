@@ -1,6 +1,6 @@
 package com.chat_project_final.chatprojectfinal.entities;
 
-public class Role {
+public class ChannelUser {
     public static final String TABLE = "tc_channel_user";
 
     public static class columns {

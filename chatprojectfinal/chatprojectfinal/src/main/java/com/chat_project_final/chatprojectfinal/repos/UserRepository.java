@@ -36,9 +36,11 @@ public class UserRepository {
     }
 
     public boolean delete(int id) {
-        int resultCount = this.db.deleteTable(User.TABLE)
+        int resultCount = this.db.updateTable(User.TABLE)
+                .set(User.columns.IS_ACTIVE, true)
                 .where(User.columns.ID, id)
-                .delete();
+                .update();
+
         return resultCount == 1;
     }
 }

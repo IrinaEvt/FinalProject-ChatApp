@@ -37,9 +37,11 @@ public class MessageRepository {
     }
 
     public boolean delete(int id) {
-        int resultCount = this.db.deleteTable(Message.TABLE)
+        int resultCount = this.db.updateTable(Message.TABLE)
+                .set(Message.columns.IS_ACTIVE, 1)
                 .where(Message.columns.ID, id)
-                .delete();
+                .update();
+
         return resultCount == 1;
     }
 }

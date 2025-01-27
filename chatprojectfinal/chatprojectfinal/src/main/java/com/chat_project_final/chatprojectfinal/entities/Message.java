@@ -11,6 +11,7 @@ public class Message {
         public static final String CONTENT = "content";
         public static final String TIMESTAMP = "timestamp";
         public static final String CHANNEL_ID = "channel_id";
+        public static final String IS_ACTIVE = "is_active";
     }
 
     private int id;
