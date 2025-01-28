@@ -31,6 +31,21 @@ public class MessageController {
                 .build();
     }
 
+    @PostMapping("/messages/private")
+    public ResponseEntity<?> createPrivateMessage(@RequestBody Message message) {
+        boolean isCreated = messageService.createPrivateMessage(message);
+
+        if (isCreated) {
+            return AppResponse.success()
+                    .withMessage("Private message sent successfully")
+                    .build();
+        }
+
+        return AppResponse.error()
+                .withMessage("Private message could not be sent")
+                .build();
+    }
+
     @GetMapping("/messages/channel/{channelId}")
     public ResponseEntity<?> getMessagesByChannel(@PathVariable int channelId) {
         ArrayList<Message> messages = (ArrayList<Message>) messageService.getMessagesByChannel(channelId);
@@ -52,6 +67,15 @@ public class MessageController {
 
         return AppResponse.success()
                 .withDataAsArray(message)
+                .build();
+    }
+
+    @GetMapping("/messages/user/{userId}")
+    public ResponseEntity<?> getMessagesForUser(@PathVariable int userId) {
+        ArrayList<Message> messages = (ArrayList<Message>) messageService.getMessagesForUser(userId);
+
+        return AppResponse.success()
+                .withData(messages)
                 .build();
     }
 

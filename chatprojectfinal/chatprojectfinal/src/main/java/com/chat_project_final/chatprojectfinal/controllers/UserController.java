@@ -1,5 +1,6 @@
 package com.chat_project_final.chatprojectfinal.controllers;
 
+import com.chat_project_final.chatprojectfinal.entities.Friend;
 import com.chat_project_final.chatprojectfinal.entities.User;
 import com.chat_project_final.chatprojectfinal.http.AppResponse;
 import com.chat_project_final.chatprojectfinal.services.UserService;
@@ -11,6 +12,7 @@ import java.util.List;
 @RestController
 public class UserController {
     private final UserService userService;
+
 
 
     public UserController(UserService userService) {
@@ -58,7 +60,7 @@ public class UserController {
                 .build();
     }
 
-    @DeleteMapping("users/{id}")
+    @DeleteMapping("/users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable int id) {
         boolean isDeleted = userService.removeUser(id);
 
@@ -71,5 +73,19 @@ public class UserController {
         return AppResponse.success()
                 .withMessage("User deleted successfully")
                 .build();
+    }
+
+    @PostMapping("/users/{userId}/friends/{friendId}")
+    public String addFriend(@PathVariable int userId, @PathVariable int friendId) {
+        boolean isAdded = userService.addFriend(userId, friendId);
+        if (isAdded) {
+            return "Friend added successfully!";
+        }
+        return "Failed to add friend.";
+    }
+
+    @GetMapping("users/{userId}/friends")
+    public List<Friend> getFriendsByUserId(@PathVariable int userId) {
+        return userService.getFriendsByUserId(userId);
     }
 }

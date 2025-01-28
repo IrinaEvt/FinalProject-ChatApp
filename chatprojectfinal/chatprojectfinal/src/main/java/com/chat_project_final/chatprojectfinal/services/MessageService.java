@@ -21,6 +21,10 @@ public class MessageService {
         return this.messageRepository.insert(message);
     }
 
+    public boolean createPrivateMessage(Message message) {
+        return this.messageRepository.insertPrivateMessage(message);
+    }
+
 
     public Message getMessage(int id) {
         return this.messageRepository.fetch(id);
@@ -29,6 +33,10 @@ public class MessageService {
 
     public List<Message> getMessagesByChannel(int channelId) {
         return this.messageRepository.fetchAllByChannel(channelId);
+    }
+
+    public List<Message> getMessagesForUser(int userId) {
+        return this.messageRepository.fetchAllByUser(userId);
     }
 
 
