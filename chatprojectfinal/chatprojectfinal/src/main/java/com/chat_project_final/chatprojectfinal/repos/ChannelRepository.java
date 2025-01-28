@@ -6,6 +6,7 @@ import com.chat_project_final.chatprojectfinal.mappers.ChannelRowMapper;
 import com.chat_project_final.chatprojectfinal.system.db.QueryBuilder;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -30,11 +31,6 @@ public class ChannelRepository {
                 .fetch(new ChannelRowMapper());
     }
 
-    public List<Channel> fetchAll() {
-        return this.db.selectAll()
-                .from(Channel.TABLE)
-                .fetchAll(new ChannelRowMapper());
-    }
 
     public boolean delete(int id) {
         int resultCount = this.db.updateTable(Channel.TABLE)
@@ -45,33 +41,32 @@ public class ChannelRepository {
         return resultCount == 1;
     }
 
-
-    public List<Channel> fetchAllByUserId(int userId) {
+    public List<Channel> fetchAllByOwnerId(int userId) {
         return this.db.selectAll()
-                .from(Channel.TABLE + " c")
-                .join(ChannelUser.TABLE + " r", "c." + Channel.columns.ID + " = r." + ChannelUser.columns.CHANNEL_ID)
-                .where("r." + ChannelUser.columns.USER_ID, userId)
+                .from(Channel.TABLE)
+                .where(Channel.columns.OWNER_ID, userId)
+                .fetchAll(new ChannelRowMapper());
+    }
+
+    public List<Channel> fetchAllByMemberId(int userId) {
+        return this.db.select("c.id", "c.name", "c.owner_id")
+                .from(ChannelUser.TABLE + " cu")              // Channel as 'c', ChannelUser as 'cu'
+                .join(Channel.TABLE + " c", "cu.channel_id = c.id")  // Join Channel on channel_id
+                .where("cu." + ChannelUser.columns.USER_ID, userId)
+                .rawAndWhere("(cu.role = ? OR cu.role = ?)", "member", "admin")
                 .fetchAll(new ChannelRowMapper());
     }
 
     public boolean addUserToChannel(int channelId, int userId) {
 
-
-        ChannelUser newChannelUser = new ChannelUser();
-        newChannelUser.setChannelId(channelId);
-        newChannelUser.setUserId(userId);
-        newChannelUser.setRole("member");
-
-
         return this.db.into(ChannelUser.TABLE)
-                .withValue(ChannelUser.columns.CHANNEL_ID, newChannelUser.getChannelId())
-                .withValue(ChannelUser.columns.USER_ID, newChannelUser.getUserId())
-                .withValue(ChannelUser.columns.ROLE, newChannelUser.getRole())
+                .withValue(ChannelUser.columns.CHANNEL_ID, channelId)
+                .withValue(ChannelUser.columns.USER_ID, userId)
+                .withValue(ChannelUser.columns.ROLE, "member")
                 .insert();
     }
 
     public boolean setAdminRole(int channelId, int userId) {
-
 
         return this.db.updateTable(ChannelUser.TABLE)
                 .set(ChannelUser.columns.ROLE, "admin")

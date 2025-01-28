@@ -27,6 +27,15 @@ public class WhereQueryBuilder<T>  {
         return this.andWhere(columnName, "=", value);
     }
 
+
+    public T rawAndWhere(String rawCondition, Object... values) {
+        this.queryProcessor.getQueryBuilder().append(" AND ").append(rawCondition);
+        for (Object value : values) {
+            this.queryProcessor.getValueCollection().add(value);
+        }
+        return (T) this;
+    }
+
     public T orWhere(String columnName, String operator, Object value){
         this.queryProcessor.getQueryBuilder().append(" OR (");
         this.queryProcessor.buildColumnValuePair(columnName,operator);

@@ -31,7 +31,7 @@ public class MessageController {
                 .build();
     }
 
-    @PostMapping("/messages/private")
+    @PostMapping("/messages/user")
     public ResponseEntity<?> createPrivateMessage(@RequestBody Message message) {
         boolean isCreated = messageService.createPrivateMessage(message);
 

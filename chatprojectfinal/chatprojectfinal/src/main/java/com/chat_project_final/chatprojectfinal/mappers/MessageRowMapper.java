@@ -13,10 +13,12 @@ public class MessageRowMapper implements RowMapper<Message> {
     public Message mapRow(ResultSet rs, int rowNum) throws SQLException {
         Message message = new Message();
         message.setId(rs.getInt(Message.columns.ID));
+        message.setChannelId(rs.getInt(Message.columns.CHANNEL_ID));
         message.setSenderId(rs.getInt(Message.columns.SENDER_ID));
+        message.setReceiverId(rs.getInt(Message.columns.RECEIVER_ID));
         message.setContent(rs.getString(Message.columns.CONTENT));
         message.setTimestamp(rs.getTimestamp(Message.columns.TIMESTAMP));
-        message.setChannelId(rs.getInt(Message.columns.CHANNEL_ID));
+
         return message;
     }
 }

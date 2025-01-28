@@ -1,12 +1,14 @@
 package com.chat_project_final.chatprojectfinal.controllers;
 
 import com.chat_project_final.chatprojectfinal.entities.Channel;
+import com.chat_project_final.chatprojectfinal.entities.User;
 import com.chat_project_final.chatprojectfinal.http.AppResponse;
 import com.chat_project_final.chatprojectfinal.services.ChannelService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ChannelController {
@@ -32,10 +34,25 @@ public class ChannelController {
                     .build();
         }
 
+    @GetMapping("/channels/{id}")
+    public ResponseEntity<?> getSingleChannel(@PathVariable int id) {
+        Channel channel = channelService.getChannel(id);
+
+        if (channel == null) {
+            return AppResponse.error()
+                    .withMessage("User not found")
+                    .build();
+        }
+
+        return AppResponse.success()
+                .withDataAsArray(channel)
+                .build();
+    }
+
 
         @PostMapping("/channels/{channelId}/users/{userId}")
-        public ResponseEntity<?> addUserToChannel(@PathVariable int channelId, @PathVariable int userId, @RequestParam String role) {
-            boolean isAdded = channelService.addUserToChannel(channelId, userId, role);
+        public ResponseEntity<?> addUserToChannel(@PathVariable int channelId, @PathVariable int userId) {
+            boolean isAdded = channelService.addUserToChannel(channelId, userId);
 
             if (isAdded) {
                 return AppResponse.success()
@@ -64,14 +81,23 @@ public class ChannelController {
                     .build();
         }
 
-        @GetMapping("/channels/user/{userId}")
-        public ResponseEntity<?> getAllChannelsByUser(@PathVariable int userId) {
-            List<Channel> channels = channelService.getAllChannelsByUserId(userId);
+        @GetMapping("/channels/owner/{userId}")
+        public ResponseEntity<?> getAllChannelsByOwner(@PathVariable int userId) {
+            List<Channel> channels = channelService.getAllChannelsByOwner(userId);
 
             return AppResponse.success()
                     .withData(channels)
                     .build();
         }
+
+    @GetMapping("/channels/member/{userId}")
+    public ResponseEntity<?> getAllChannelsByMember(@PathVariable int userId) {
+        List<Channel> channels = channelService.getAllChannelsByMember(userId);
+
+        return AppResponse.success()
+                .withData(channels)
+                .build();
+    }
 
         @DeleteMapping("/channels/{channelId}")
         public ResponseEntity<?> deleteChannel(@PathVariable int channelId) {
@@ -89,7 +115,8 @@ public class ChannelController {
         }
 
     @PutMapping("channels/{channelId}/name")
-    public ResponseEntity<?> updateChannelName(@PathVariable int channelId, @RequestParam String newName) {
+    public ResponseEntity<?> updateChannelName(@PathVariable int channelId, @RequestBody Map<String, String> request) {
+        String newName = request.get("newName");
         boolean isUpdated = channelService.updateChannelName(channelId, newName);
 
         if (isUpdated) {

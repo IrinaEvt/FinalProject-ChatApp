@@ -25,7 +25,6 @@ public class MessageService {
         return this.messageRepository.insertPrivateMessage(message);
     }
 
-
     public Message getMessage(int id) {
         return this.messageRepository.fetch(id);
     }
@@ -38,7 +37,6 @@ public class MessageService {
     public List<Message> getMessagesForUser(int userId) {
         return this.messageRepository.fetchAllByUser(userId);
     }
-
 
     public boolean deleteMessage(int id) {
         return this.messageRepository.delete(id);

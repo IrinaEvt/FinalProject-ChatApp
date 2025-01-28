@@ -1,6 +1,7 @@
 package com.chat_project_final.chatprojectfinal.services;
 
 import com.chat_project_final.chatprojectfinal.entities.Channel;
+import com.chat_project_final.chatprojectfinal.entities.User;
 import com.chat_project_final.chatprojectfinal.repos.ChannelRepository;
 import com.chat_project_final.chatprojectfinal.repos.UserRepository;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,12 @@ public class ChannelService {
         return this.channelRepository.insert(channel);
     }
 
+    public Channel getChannel(int id) {
+        return channelRepository.fetch(id);
+    }
 
-    public boolean addUserToChannel(int channelId, int userId, String role) {
+
+    public boolean addUserToChannel(int channelId, int userId) {
         // Проверка дали потребителят не е вече в канала
         return this.channelRepository.addUserToChannel(channelId, userId);
     }
@@ -35,8 +40,14 @@ public class ChannelService {
     }
 
 
-    public List<Channel> getAllChannelsByUserId(int userId) {
-        return this.channelRepository.fetchAllByUserId(userId);
+
+
+    public List<Channel> getAllChannelsByOwner(int userId) {
+        return this.channelRepository.fetchAllByOwnerId(userId);
+    }
+
+    public List<Channel> getAllChannelsByMember(int userId) {
+        return this.channelRepository.fetchAllByMemberId(userId);
     }
 
 

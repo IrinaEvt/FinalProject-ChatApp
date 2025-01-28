@@ -17,7 +17,9 @@ public class MessageRepository {
 
     public boolean insert(Message message) {
         return this.db.into(Message.TABLE)
+                .withValue(Message.columns.CHANNEL_ID, message.getSenderId())
                 .withValue(Message.columns.SENDER_ID, message.getSenderId())
+                .withValue(Message.columns.RECEIVER_ID, message.getSenderId())
                 .withValue(Message.columns.CONTENT, message.getContent())
                 .insert();
     }
@@ -48,7 +50,6 @@ public class MessageRepository {
         return this.db.selectAll()
                 .from(Message.TABLE)
                 .where(Message.columns.RECEIVER_ID, userId)
-                .orWhere(Message.columns.SENDER_ID, userId)
                 .fetchAll(new MessageRowMapper());
     }
 

@@ -42,4 +42,6 @@ public class SelectQueryBuilder<T> extends WhereQueryBuilder<SelectQueryBuilder<
         queryProcessor.getQueryBuilder().append(" JOIN ").append(table).append(" ON ").append(condition);
         return this;
     }
+
+
 }
