@@ -22,6 +22,14 @@ public class MessageRepository {
                 .insert();
     }
 
+    public boolean insertPrivateMessage(Message message) {
+        return this.db.into(Message.TABLE)
+                .withValue(Message.columns.SENDER_ID, message.getSenderId())
+                .withValue(Message.columns.RECEIVER_ID, message.getReceiverId())
+                .withValue(Message.columns.CONTENT, message.getContent())
+                .insert();
+    }
+
     public Message fetch(int id) {
         return this.db.selectAll()
                 .from(Message.TABLE)
@@ -33,6 +41,14 @@ public class MessageRepository {
         return this.db.selectAll()
                 .from(Message.TABLE)
                 .where(Message.columns.CHANNEL_ID, channelId)
+                .fetchAll(new MessageRowMapper());
+    }
+
+    public List<Message> fetchAllByUser(int userId) {
+        return this.db.selectAll()
+                .from(Message.TABLE)
+                .where(Message.columns.RECEIVER_ID, userId)
+                .orWhere(Message.columns.SENDER_ID, userId)
                 .fetchAll(new MessageRowMapper());
     }
 

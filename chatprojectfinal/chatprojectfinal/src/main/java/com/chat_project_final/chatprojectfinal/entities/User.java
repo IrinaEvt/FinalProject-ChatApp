@@ -1,7 +1,7 @@
 package com.chat_project_final.chatprojectfinal.entities;
 
 public class User {
-    public static final String TABLE = "users";
+    public static final String TABLE = "td_users";
 
     public static class columns {
         public static final String ID = "id";

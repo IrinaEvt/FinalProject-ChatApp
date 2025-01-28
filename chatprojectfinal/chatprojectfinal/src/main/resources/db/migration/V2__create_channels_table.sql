@@ -8,6 +8,6 @@ CREATE TABLE IF NOT EXISTS td_channels (
 CREATE TABLE IF NOT EXISTS tc_channel_user (
     channel_id INT NOT NULL,
     user_id INT NOT NULL,
-    role VARCHAR(50) DEFAULT 'MEMBER',
+    role VARCHAR(50) DEFAULT 'member',
     PRIMARY KEY(channel_id, user_id)
 );
