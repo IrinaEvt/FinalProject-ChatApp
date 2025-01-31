@@ -73,9 +73,9 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping("/users/{userId}/friends/{friendId}")
-    public String addFriend(@PathVariable int userId, @PathVariable int friendId) {
-        boolean isAdded = userService.addFriend(userId, friendId);
+    @PostMapping("/users/friends")
+    public String addFriend(@RequestBody Friend friend) {
+        boolean isAdded = userService.addFriend(friend.getUserId(), friend.getFriendId());
         if (isAdded) {
             return "Friend added successfully!";
         }
@@ -83,7 +83,14 @@ public class UserController {
     }
 
     @GetMapping("users/{userId}/friends")
-    public List<Friend> getFriendsByUserId(@PathVariable int userId) {
-        return userService.getFriendsByUserId(userId);
+    public ResponseEntity<?> getFriendsByUserId(@PathVariable int userId) {
+        System.out.println(userId);
+        List<Friend> friends = userService.getFriendsByUserId(userId);
+
+
+
+        return AppResponse.success()
+                .withData(friends)
+                .build();
     }
 }

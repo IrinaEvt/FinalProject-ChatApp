@@ -46,7 +46,7 @@ public class ChannelService {
         return this.channelRepository.fetchAllByOwnerId(userId);
     }
 
-    public List<Channel> getAllChannelsByMember(int userId) {
+    public List<Channel> getAllChannelsByMember(int userId) throws Exception {
         return this.channelRepository.fetchAllByMemberId(userId);
     }
 

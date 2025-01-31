@@ -1,0 +1,4 @@
+<div class="app-container">
+<app-sidebar (channelId)="receiveChannelIdFromSidebar($event)" (friendId)="receiveFriendIdFromSidebar($event)"></app-sidebar>
+  <app-chat [channelId]="sharedChannelId" [friendId]="sharedFriendId" class="chat-container"></app-chat>
+</div>

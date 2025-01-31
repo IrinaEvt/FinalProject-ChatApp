@@ -1,0 +1,30 @@
+<div class="sidebar">
+  <div class="chanels-container">
+    <div class="my-chanels">
+    <h4>Собствени Канали</h4>
+      @for(channelElement of channelsOwnerCollection; track channelElement) {
+        <div class="element">
+          <a href="#"(click)="sendChannelId(channelElement.id);$event.preventDefault()">{{ channelElement.name }}</a>
+        </div>
+        }
+      </div>
+      <div class="owned-chanels">
+        <h4>Други Канали</h4>
+        @for(channelElement of channelsMemberCollection; track channelElement) {
+          <div class="element">
+            <a href="#"(click)="sendChannelId(channelElement.id);$event.preventDefault()">{{ channelElement.name }}</a>
+          </div>
+          }
+        </div>
+    </div>
+    <div class="friends-container">
+      <h4>Приятели</h4>
+      @for(friendElement of friendsCollection; track friendElement) {
+        <div class="element">
+            <a href="#"(click)="sendFriendId(friendElement.id);$event.preventDefault()">{{ friendElement.username }}</a>
+          </div>
+        }
+      </div>
+    </div>
+    
+    

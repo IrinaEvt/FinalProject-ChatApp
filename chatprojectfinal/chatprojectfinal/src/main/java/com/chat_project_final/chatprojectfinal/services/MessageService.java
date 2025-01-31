@@ -21,8 +21,8 @@ public class MessageService {
         return this.messageRepository.insert(message);
     }
 
-    public boolean createPrivateMessage(Message message) {
-        return this.messageRepository.insertPrivateMessage(message);
+    public boolean createPrivateMessage(Message message, int friendId) {
+        return this.messageRepository.insertPrivateMessage(message, friendId);
     }
 
     public Message getMessage(int id) {
@@ -34,8 +34,8 @@ public class MessageService {
         return this.messageRepository.fetchAllByChannel(channelId);
     }
 
-    public List<Message> getMessagesForUser(int userId) {
-        return this.messageRepository.fetchAllByUser(userId);
+    public List<Message> getMessagesForUser(int userId, int friendId) {
+        return this.messageRepository.fetchAllByUser(userId, friendId);
     }
 
     public boolean deleteMessage(int id) {

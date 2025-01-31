@@ -31,9 +31,9 @@ public class MessageController {
                 .build();
     }
 
-    @PostMapping("/messages/user")
-    public ResponseEntity<?> createPrivateMessage(@RequestBody Message message) {
-        boolean isCreated = messageService.createPrivateMessage(message);
+    @PostMapping("/messages/user/{friendId}")
+    public ResponseEntity<?> createPrivateMessage(@RequestBody Message message, @PathVariable int friendId) {
+        boolean isCreated = messageService.createPrivateMessage(message, friendId);
 
         if (isCreated) {
             return AppResponse.success()
@@ -70,9 +70,9 @@ public class MessageController {
                 .build();
     }
 
-    @GetMapping("/messages/user/{userId}")
-    public ResponseEntity<?> getMessagesForUser(@PathVariable int userId) {
-        ArrayList<Message> messages = (ArrayList<Message>) messageService.getMessagesForUser(userId);
+    @GetMapping("/messages/user/{userId}/friend/{friendId}")
+    public ResponseEntity<?> getMessagesForUser(@PathVariable int userId,@PathVariable int friendId) {
+        ArrayList<Message> messages = (ArrayList<Message>) messageService.getMessagesForUser(userId,friendId);
 
         return AppResponse.success()
                 .withData(messages)

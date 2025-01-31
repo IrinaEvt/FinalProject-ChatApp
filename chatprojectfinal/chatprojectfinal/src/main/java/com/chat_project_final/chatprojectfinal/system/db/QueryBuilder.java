@@ -16,8 +16,17 @@ public class QueryBuilder<T> {
 
 
     //SELECT
-    public SelectQueryBuilder<T> select(String ...cols){
-        return new SelectQueryBuilder<T>(queryProcessor,cols);
+    public SelectQueryBuilder<T> select(String ...cols) throws Exception {
+        int count = 0;
+     while(count < 3) {
+        try {
+            return new SelectQueryBuilder<T>(queryProcessor, cols);
+        }catch (Exception exception){
+            count++;
+            System.err.println("Selection failed");
+        }
+     }
+        throw new Exception("Exception");
     }
 
     public SelectQueryBuilder<T> selectAll(){

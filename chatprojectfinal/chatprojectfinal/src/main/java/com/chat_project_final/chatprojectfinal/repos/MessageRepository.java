@@ -17,17 +17,17 @@ public class MessageRepository {
 
     public boolean insert(Message message) {
         return this.db.into(Message.TABLE)
-                .withValue(Message.columns.CHANNEL_ID, message.getSenderId())
+                .withValue(Message.columns.CHANNEL_ID, message.getChannelId())
                 .withValue(Message.columns.SENDER_ID, message.getSenderId())
-                .withValue(Message.columns.RECEIVER_ID, message.getSenderId())
+                .withValue(Message.columns.RECEIVER_ID, message.getReceiverId())
                 .withValue(Message.columns.CONTENT, message.getContent())
                 .insert();
     }
 
-    public boolean insertPrivateMessage(Message message) {
+    public boolean insertPrivateMessage(Message message, int friendId) {
         return this.db.into(Message.TABLE)
                 .withValue(Message.columns.SENDER_ID, message.getSenderId())
-                .withValue(Message.columns.RECEIVER_ID, message.getReceiverId())
+                .withValue(Message.columns.RECEIVER_ID, friendId)
                 .withValue(Message.columns.CONTENT, message.getContent())
                 .insert();
     }
@@ -46,10 +46,11 @@ public class MessageRepository {
                 .fetchAll(new MessageRowMapper());
     }
 
-    public List<Message> fetchAllByUser(int userId) {
+    public List<Message> fetchAllByUser(int userId, int friendId) {
         return this.db.selectAll()
                 .from(Message.TABLE)
-                .where(Message.columns.RECEIVER_ID, userId)
+                .where(Message.columns.RECEIVER_ID, friendId)
+                .andWhere(Message.columns.SENDER_ID, userId)
                 .fetchAll(new MessageRowMapper());
     }
 

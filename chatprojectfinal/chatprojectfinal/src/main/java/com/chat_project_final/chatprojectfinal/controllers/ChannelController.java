@@ -91,7 +91,7 @@ public class ChannelController {
         }
 
     @GetMapping("/channels/member/{userId}")
-    public ResponseEntity<?> getAllChannelsByMember(@PathVariable int userId) {
+    public ResponseEntity<?> getAllChannelsByMember(@PathVariable int userId) throws Exception {
         List<Channel> channels = channelService.getAllChannelsByMember(userId);
 
         return AppResponse.success()

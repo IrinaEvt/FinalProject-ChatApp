@@ -42,6 +42,8 @@ public class UserService {
     }
 
     public List<Friend> getFriendsByUserId(int userId) {
+
         return friendRepository.fetchFriendsByUserId(userId);
+
     }
 }

@@ -1,0 +1,14 @@
+<div class="container">
+  <div class="messages">
+    <div *ngFor="let msg of messages" [ngClass]="{'message-right': msg.senderId == '1'}" class="message"><p>{{msg.senderId === 1 ? 'Me: ' : msg.senderName + ': '}}{{ msg.content }}</p>
+    <span>{{msg.timestamp | date:'medium' }}
+    </span>
+    </div>
+  </div>
+
+  <div class="message-input">
+    <input #saveInput type="text" placeholder="Напиши съобщение..." />
+    <button (click)="sendMessage(saveInput.value); saveInput.value=''">📩</button>
+    
+  </div>
+</div>

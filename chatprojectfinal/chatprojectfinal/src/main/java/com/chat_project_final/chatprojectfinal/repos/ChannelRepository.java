@@ -48,7 +48,7 @@ public class ChannelRepository {
                 .fetchAll(new ChannelRowMapper());
     }
 
-    public List<Channel> fetchAllByMemberId(int userId) {
+    public List<Channel> fetchAllByMemberId(int userId) throws Exception {
         return this.db.select("c.id", "c.name", "c.owner_id")
                 .from(ChannelUser.TABLE + " cu")              // Channel as 'c', ChannelUser as 'cu'
                 .join(Channel.TABLE + " c", "cu.channel_id = c.id")  // Join Channel on channel_id
@@ -83,4 +83,5 @@ public class ChannelRepository {
         return resultCount == 1;
 
     }
+
 }
