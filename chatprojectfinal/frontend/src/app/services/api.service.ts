@@ -2,6 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MessageType } from '../models/message.model';
 import { FriendType } from '../models/friend.model';
+//import { ChannelType } from '../models/friend.model';
+import {ChannelType } from '../models/channel.model'
 
 @Injectable({
   providedIn: 'root'
@@ -53,4 +55,21 @@ export class ApiService {
   sendFriendMessage(message: MessageType){
     return this.httpClient.post(`${this.apiUrl}/messages`, message);
   }
+
+  public updateChannel($channel: ChannelType) {
+    return this.httpClient.put(`${this.apiUrl}/channels`, $channel);
+  }
+
+  createChannel(channel: ChannelType){
+    return this.httpClient.post(`${this.apiUrl}/channels`, channel);
+  }
+
+  deleteChannel(channelId: number){
+    return this.httpClient.delete(`${this.apiUrl}/channels/${channelId}`);
+  }
+
+  getRole(channelId: number, userId: number){
+    return this.httpClient.get(`${this.apiUrl}/channels/${channelId}/role/${userId}`)
+  }
+
 }

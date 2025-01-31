@@ -21,6 +21,7 @@ public class ChannelService {
 
 
     public boolean createChannel(Channel channel) {
+
         return this.channelRepository.insert(channel);
     }
 
@@ -55,15 +56,14 @@ public class ChannelService {
         return this.channelRepository.setAdminRole(channelId, userId);
     }
 
-    public boolean updateChannelName(int channelId, String newName) {
-        Channel channel = this.channelRepository.fetch(channelId);
+    public boolean setOwnerRole(int channelId, int userId) {
+        return this.channelRepository.setOwnerRole(channelId, userId);
+    }
 
-        if (channel == null) {
-            return false; // Каналът не съществува
-        }
+    public boolean updateChannelName(Channel channel) {
+        return this.channelRepository.update(channel);
 
-        channel.setName(newName); // Променяме името на канала
-        return this.channelRepository.update(channel); // Актуализираме канала в базата данни
+
     }
 
 

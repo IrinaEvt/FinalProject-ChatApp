@@ -1,5 +1,6 @@
 package com.chat_project_final.chatprojectfinal.repos;
 
+import com.chat_project_final.chatprojectfinal.entities.Channel;
 import com.chat_project_final.chatprojectfinal.entities.User;
 import com.chat_project_final.chatprojectfinal.mappers.UserRowMapper;
 import com.chat_project_final.chatprojectfinal.system.db.QueryBuilder;
@@ -26,18 +27,20 @@ public class UserRepository {
         return this.db.selectAll()
                 .from(User.TABLE)
                 .where(User.columns.ID, id)
+                .andWhere(User.columns.IS_ACTIVE,1)
                 .fetch(new UserRowMapper());
     }
 
     public List<User> fetchAll() {
         return this.db.selectAll()
                 .from(User.TABLE)
+                .where(User.columns.IS_ACTIVE,1)
                 .fetchAll(new UserRowMapper());
     }
 
     public boolean delete(int id) {
         int resultCount = this.db.updateTable(User.TABLE)
-                .set(User.columns.IS_ACTIVE, true)
+                .set(User.columns.IS_ACTIVE, 0)
                 .where(User.columns.ID, id)
                 .update();
 

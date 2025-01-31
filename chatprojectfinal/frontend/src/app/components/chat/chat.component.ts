@@ -2,14 +2,14 @@ import { Component, Input, inject, SimpleChanges} from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
+import { ChannelType } from '../../models/channel.model';
 
 
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterOutlet],
+  imports: [CommonModule, FormsModule],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
@@ -28,19 +28,20 @@ export class ChatComponent{
  
   }
 
+
+
   ngOnChanges(changes : SimpleChanges) : void {
       if(changes["channelId"]){
         this.loadChannelMessages();
       this.activeChat =  "channel"
-      console.log("Heeeeeeeeeeeeeeey  CHANNEL ", this.channelId )}
+      }
       else if(changes["friendId"]){
         this.loadFriendMessages();
         this.activeChat = "friend";
-        console.log("Heeeeeeeeeeeeeeey   ", this.friendId )
       }
-
- //   this.loadChannelMessages();
   }
+
+
 
   loadChannelMessages() {
     if (!this.channelId) return;
@@ -51,7 +52,6 @@ export class ChatComponent{
         message.senderName = user.username
         this.messages.push(message);
        }    
-       console.log(this.messages)
     });
   }
 
@@ -61,7 +61,6 @@ export class ChatComponent{
       
       var newMessages = []
       const response1 : any = await this.apiService.getFriendMessages(this.friendId, 1).toPromise()
-      console.log(response1)
 
       for (var message of response1.data) {
           const user = await this.fetchUser(message.senderId)
@@ -93,7 +92,6 @@ export class ChatComponent{
         senderId: 1
       })
       .subscribe((result:any) => {
-        console.log(result);
         this.loadChannelMessages();
       });
     }
@@ -105,7 +103,6 @@ export class ChatComponent{
           senderId: 1
         })
         .subscribe((result:any) => {
-          console.log(result);
           this.loadFriendMessages();
         });
       }
@@ -114,7 +111,9 @@ export class ChatComponent{
 
   async fetchUser($inputValue: number) {
     const response : any = await this.apiService.getUser($inputValue).toPromise();
-    console.log(response);
-       return response.data[0];
+       return response.data[0];      
 };
+
+
+
 }

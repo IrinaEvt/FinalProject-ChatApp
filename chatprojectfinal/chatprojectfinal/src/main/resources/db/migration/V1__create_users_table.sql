@@ -1,3 +1,4 @@
+
 CREATE TABLE IF NOT EXISTS td_users (
     id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(100) NOT NULL,
@@ -7,5 +8,6 @@ CREATE TABLE IF NOT EXISTS td_users (
 
 INSERT INTO td_users (username, password, is_active)
 VALUES
-('firstUser', '1234', '1'),
-('irinaEvt', '5678', '1');
+('irinaEvt', 'pass1', '1'),
+('Pesho', 'pass2', '1'),
+('Tosho', 'pass1', '1');

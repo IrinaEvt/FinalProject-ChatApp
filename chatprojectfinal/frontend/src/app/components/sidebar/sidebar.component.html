@@ -1,11 +1,34 @@
 <div class="sidebar">
   <div class="chanels-container">
     <div class="my-chanels">
-    <h4>Собствени Канали</h4>
+      <div class="header-container">
+      <h4>
+        Собствени Канали
+      </h4> 
+      <button (click)="processOnCreate()" class="add-button">
+        ➕
+      </button>  
+    </div> 
       @for(channelElement of channelsOwnerCollection; track channelElement) {
         <div class="element">
           <a href="#"(click)="sendChannelId(channelElement.id);$event.preventDefault()">{{ channelElement.name }}</a>
+          <div>
+          <div (click)="processOnEdit(channelElement)" class="btn">✏️</div>
+          <div (click)="processOnDelete(channelElement)" class="btn">🗑️</div>
         </div>
+        </div>
+        }
+        @if(isEditFormVisible && selectedChannel) {
+          <div class="edit-form">
+          <input [(ngModel)]="selectedChannel.name" type="text" #editInput />
+          <button (click)="processOnSave()">Save</button>
+          </div>
+          }
+        @if(isCreateFormVisible) {
+          <div class="create-form">
+            <input #saveInput type="text" placeholder="Enter channel name..." />
+            <button (click)="processOnCreateChannel(saveInput.value)">Save</button>
+          </div>
         }
       </div>
       <div class="owned-chanels">

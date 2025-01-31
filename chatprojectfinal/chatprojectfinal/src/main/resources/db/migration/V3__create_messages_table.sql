@@ -1,3 +1,5 @@
+
+
 CREATE TABLE IF NOT EXISTS td_messages (
     id INT AUTO_INCREMENT PRIMARY KEY,
     channel_id INT,
@@ -8,7 +10,9 @@ CREATE TABLE IF NOT EXISTS td_messages (
     is_active INT DEFAULT 1
 );
 
-CREATE TABLE  IF NOT EXISTS tc_message_channel (
+
+
+CREATE TABLE IF NOT EXISTS tc_message_channel (
     message_id INT NOT NULL,
     channel_id INT NOT NULL,
     PRIMARY KEY (message_id, channel_id)

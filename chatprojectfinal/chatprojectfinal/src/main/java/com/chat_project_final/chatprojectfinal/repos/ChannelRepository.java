@@ -28,13 +28,14 @@ public class ChannelRepository {
         return this.db.selectAll()
                 .from(Channel.TABLE)
                 .where(Channel.columns.ID, id)
+                .andWhere(Channel.columns.IS_ACTIVE,1)
                 .fetch(new ChannelRowMapper());
     }
 
 
     public boolean delete(int id) {
         int resultCount = this.db.updateTable(Channel.TABLE)
-                .set(Channel.columns.IS_ACTIVE, 1)
+                .set(Channel.columns.IS_ACTIVE, 0)
                 .where(Channel.columns.ID, id)
                 .update();
 
@@ -45,6 +46,7 @@ public class ChannelRepository {
         return this.db.selectAll()
                 .from(Channel.TABLE)
                 .where(Channel.columns.OWNER_ID, userId)
+                .andWhere(Channel.columns.IS_ACTIVE,1)
                 .fetchAll(new ChannelRowMapper());
     }
 
@@ -75,13 +77,31 @@ public class ChannelRepository {
                 .update() == 1;
     }
 
+    public boolean setOwnerRole(int channelId, int userId) {
+
+        return this.db.updateTable(ChannelUser.TABLE)
+                .set(ChannelUser.columns.ROLE, "owner")
+                .where(ChannelUser.columns.CHANNEL_ID, channelId)
+                .andWhere(ChannelUser.columns.USER_ID, userId)
+                .update() == 1;
+    }
+
     public boolean update(Channel channel) {
         int resultCount = this.db.updateTable(Channel.TABLE)
-                .set(Channel.columns.NAME, channel.getName())  
+                .set(Channel.columns.NAME, channel.getName())
+                .set(Channel.columns.OWNER_ID, channel.getOwnerId())
                 .where(Channel.columns.ID, channel.getId())
+                .andWhere(Channel.columns.IS_ACTIVE,"=",1)
                 .update();
         return resultCount == 1;
+    }
 
+    public boolean insertOwner(int channelId, int userId){
+        return this.db.into(ChannelUser.TABLE)
+                .withValue(ChannelUser.columns.CHANNEL_ID, channelId)
+                .withValue(ChannelUser.columns.USER_ID, userId)
+                .withValue(ChannelUser.columns.ROLE, "owner")
+                .insert();
     }
 
 }

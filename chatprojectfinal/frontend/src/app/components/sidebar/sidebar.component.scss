@@ -1,5 +1,4 @@
 .sidebar {
-    width: 250px;
     min-width: 250px;
     background: #f1f1f1;
     height: 100vh;
@@ -15,6 +14,7 @@
       border: 1px solid #d2d2d2;
       padding: 20px;
       flex:1;
+      overflow: auto;
       }
     }
     .friends-container{
@@ -26,6 +26,8 @@
   }
   .element {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
   ul {
     list-style: none;
@@ -37,4 +39,53 @@
     &:hover {
       background: #ddd;
     }
+  }
+
+  .add-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #007bff;
+    margin-left: 10px;
+  }
+  
+  .add-button:hover {
+    color: #0056b3;
+  }
+
+  .header-container{
+    display: flex;
+  }
+
+  .create-form,.edit-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-top: 10px;
+
+  }
+  
+  .create-form input,.edit-form input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  
+  .create-form button,.edit-form button {
+    background: #007bff;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .create-form button:hover,.edit-form button:hover {
+    background: #0056b3;
   }

@@ -22,6 +22,10 @@ export class SidebarComponent {
   public channelsOwnerCollection: ChannelType[] = [];
   public channelsMemberCollection: ChannelType[] = [];
   public friendsCollection: UserType[] = [];
+  public isCreateFormVisible = false;
+  public isEditFormVisible = false;
+  public selectedChannel: ChannelType | null = null;
+
   @Output() channelId : EventEmitter<number | undefined>  = new EventEmitter();
   @Output() friendId : EventEmitter<number | undefined>  = new EventEmitter();
 
@@ -29,39 +33,38 @@ export class SidebarComponent {
 
   
   ngOnInit(): void {
-    console.log('Start sidebar component');
       this.loadOwnerChannels();
       this.loadMemberChannels();
       this.loadFriends();
   } 
+
+  public processOnCreate() {
+    this.isCreateFormVisible = true;
+  }
   
-  loadOwnerChannels() {
-    this.apiService.getUserChannelsByOwner(this.userId).subscribe((result: any) => {
-      console.log('ChannelsOwner:', result.data); 
+  async loadOwnerChannels() {
+  const channels =  await this.apiService.getUserChannelsByOwner(this.userId).subscribe((result: any) => {
       this.channelsOwnerCollection = result.data;
+      
     });
   }
 
   loadMemberChannels() {
     this.apiService.getUserChannelsByMember(this.userId).subscribe((result: any) => {
-      console.log('ChannelsMember:', result.data); 
       this.channelsMemberCollection = result.data;
     });
   }
 
   async fetchUser($inputValue: number) {
     const response : any = await this.apiService.getUser($inputValue).toPromise();
-    console.log(response);
        return response.data[0];
 };
 
   sendChannelId($inputValue: number | undefined){
-    console.log($inputValue);
     this.channelId.emit($inputValue);
   }
 
   sendFriendId($inputValue: number | undefined){
-    console.log($inputValue);
     this.friendId.emit($inputValue);
   }
 
@@ -73,7 +76,6 @@ export class SidebarComponent {
         friendId:2
       })
       .subscribe((result:any) => {
-        console.log(result);
         this.loadFriends();
       });
     }
@@ -82,10 +84,43 @@ export class SidebarComponent {
     this.apiService.getUserFriends(this.userId).subscribe(async (result: any) => {
       for(var friend of result.data){
        this.friendsCollection.push(await this.fetchUser(friend.friendId));
-       console.log(friend);
       }
 
-      console.log('Friends:', this.friendsCollection);
     });
   }
+
+  public processOnCreateChannel($inputValue: string) {
+    this.apiService
+      .createChannel({
+        name: $inputValue,
+        ownerId: 1
+      })
+      .subscribe((result: any) => {
+        this.loadOwnerChannels();
+        this.isCreateFormVisible = false;
+
+      });
+  }
+
+  public processOnSave() {
+    this.apiService
+      .updateChannel(this.selectedChannel!)
+      .subscribe((result) => {
+      });
+      this.isEditFormVisible = false;
+  }
+
+  public processOnEdit($selectedElement: ChannelType) {
+    this.isEditFormVisible = true;
+    this.selectedChannel = $selectedElement;
+  }
+
+  public processOnDelete($selectedElement: ChannelType) {
+    this.apiService
+      .deleteChannel($selectedElement.id!)
+      .subscribe((result: any) => {
+        this.loadOwnerChannels();
+      });
+    }
+  
 }

@@ -4,9 +4,11 @@ import com.chat_project_final.chatprojectfinal.entities.Channel;
 import com.chat_project_final.chatprojectfinal.entities.User;
 import com.chat_project_final.chatprojectfinal.http.AppResponse;
 import com.chat_project_final.chatprojectfinal.services.ChannelService;
+import com.chat_project_final.chatprojectfinal.services.RoleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.relation.Role;
 import java.util.List;
 import java.util.Map;
 
@@ -14,9 +16,11 @@ import java.util.Map;
 public class ChannelController {
 
         private final ChannelService channelService;
+         private final RoleService roleService;
 
-        public ChannelController(ChannelService channelService) {
+        public ChannelController(ChannelService channelService, RoleService roleService) {
             this.channelService = channelService;
+            this.roleService = roleService;
         }
 
         @PostMapping("/channels")
@@ -27,6 +31,7 @@ public class ChannelController {
                 return AppResponse.success()
                         .withMessage("Channel created successfully")
                         .build();
+
             }
 
             return AppResponse.error()
@@ -81,6 +86,21 @@ public class ChannelController {
                     .build();
         }
 
+    @PutMapping("/channels/{channelId}/users/{userId}/owner")
+    public ResponseEntity<?> setOwnerRole(@PathVariable int channelId, @PathVariable int userId) {
+        boolean isOwnerSet = channelService.setOwnerRole(channelId, userId);
+
+        if (isOwnerSet) {
+            return AppResponse.success()
+                    .withMessage("User role set to owner")
+                    .build();
+        }
+
+        return AppResponse.error()
+                .withMessage("User could not be set as owner")
+                .build();
+    }
+
         @GetMapping("/channels/owner/{userId}")
         public ResponseEntity<?> getAllChannelsByOwner(@PathVariable int userId) {
             List<Channel> channels = channelService.getAllChannelsByOwner(userId);
@@ -114,10 +134,9 @@ public class ChannelController {
                     .build();
         }
 
-    @PutMapping("channels/{channelId}/name")
-    public ResponseEntity<?> updateChannelName(@PathVariable int channelId, @RequestBody Map<String, String> request) {
-        String newName = request.get("newName");
-        boolean isUpdated = channelService.updateChannelName(channelId, newName);
+    @PutMapping("/channels")
+    public ResponseEntity<?> updateChannelName(@RequestBody Channel channel) {
+        boolean isUpdated = channelService.updateChannelName(channel);
 
         if (isUpdated) {
             return AppResponse.success()
@@ -128,5 +147,10 @@ public class ChannelController {
         return AppResponse.error()
                 .withMessage("Channel not found or name could not be updated")
                 .build();
+    }
+
+    @GetMapping("/channels/{channelId}/role/{userId}")
+    public String getRole(@PathVariable int channelId, @PathVariable int userId) throws Exception {
+           return roleService.getRole(channelId, userId);
     }
 }

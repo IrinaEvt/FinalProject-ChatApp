@@ -1,5 +1,6 @@
 package com.chat_project_final.chatprojectfinal.repos;
 
+import com.chat_project_final.chatprojectfinal.entities.Channel;
 import com.chat_project_final.chatprojectfinal.entities.Message;
 import com.chat_project_final.chatprojectfinal.mappers.MessageRowMapper;
 import com.chat_project_final.chatprojectfinal.system.db.QueryBuilder;
@@ -36,6 +37,7 @@ public class MessageRepository {
         return this.db.selectAll()
                 .from(Message.TABLE)
                 .where(Message.columns.ID, id)
+                .andWhere(Message.columns.IS_ACTIVE,1)
                 .fetch(new MessageRowMapper());
     }
 
@@ -56,7 +58,7 @@ public class MessageRepository {
 
     public boolean delete(int id) {
         int resultCount = this.db.updateTable(Message.TABLE)
-                .set(Message.columns.IS_ACTIVE, 1)
+                .set(Message.columns.IS_ACTIVE, 0)
                 .where(Message.columns.ID, id)
                 .update();
 
