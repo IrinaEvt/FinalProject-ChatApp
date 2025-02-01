@@ -21,10 +21,4 @@ CREATE TABLE IF NOT EXISTS tc_channel_user (
     PRIMARY KEY(channel_id, user_id)
 );
 
-INSERT INTO tc_channel_user (channel_id, user_id, role)
-VALUES
-('1', '1', 'owner'),
-('1', '2', 'admin'),
-('1', '3', 'member'),
-('2', '2', 'owner'),
-('2', '1', 'member');
+
